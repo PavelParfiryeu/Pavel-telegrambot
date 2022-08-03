@@ -1,0 +1,22 @@
+#парсербот Mudrosti
+import telebot
+import requests #запросы со страниц
+from bs4 import BeautifulSoup as b
+import random
+bot = telebot.TeleBot('5461825025:AAHCEF13DeRjZCUX2V6_h6np2wmgah8D8fs')
+url = 'https://citaty.info/topic/um-intellekt'
+r = requests.get(url)
+#print(r.status_code)
+soup = b(r.text, 'html.parser')
+#print(soup)
+wises = soup.find_all('div', class_='field-item even last')
+#print(wises)
+alone_wises = [i.text for i in wises]
+#print(alone_wises)
+#print(random.choice(alone_wises))
+@bot.message_handler()
+def get_wises(message):
+    if message.text == 'Мудрость' or message.text == 'мудрость':
+        bot.send_message(message.chat.id, random.choice(alone_wises))
+
+bot.polling(none_stop=True)
